@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0"/>
+
+<title>Smart Civic AI - Authentication</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+
+background:#f4f8fb;
+
+min-height:100vh;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+padding:20px;
+
+}
+
+.container{
+
+width:1100px;
+
+height:680px;
+
+background:#fff;
+
+border-radius:24px;
+
+overflow:hidden;
+
+display:flex;
+
+box-shadow:0 10px 40px rgba(0,0,0,0.08);
+
+}
+
+/* ================= LEFT PANEL ================= */
+
+.left-panel{
+
+width:50%;
+
+background:linear-gradient(135deg,#0ea5e9,#14b8a6);
+
+color:white;
+
+padding:60px;
+
+display:flex;
+
+flex-direction:column;
+
+justify-content:center;
+
+position:relative;
+
+}
+
+.logo{
+
+position:absolute;
+
+top:35px;
+
+left:40px;
+
+font-size:24px;
+
+font-weight:700;
+
+}
+
+.left-panel h1{
+
+font-size:42px;
+
+line-height:1.3;
+
+margin-bottom:20px;
+
+}
+
+.left-panel p{
+
+font-size:16px;
+
+line-height:1.8;
+
+opacity:0.95;
+
+max-width:450px;
+
+}
+
+/* ================= RIGHT PANEL ================= */
+
+.right-panel{
+
+width:50%;
+
+padding:50px 60px;
+
+display:flex;
+
+flex-direction:column;
+
+justify-content:center;
+
+background:white;
+
+}
+
+.tabs{
+
+display:flex;
+
+background:#eef4f7;
+
+border-radius:14px;
+
+padding:5px;
+
+margin-bottom:35px;
+
+}
+
+.tab-btn{
+
+width:50%;
+
+padding:14px;
+
+border:none;
+
+background:none;
+
+border-radius:10px;
+
+font-size:15px;
+
+font-weight:600;
+
+cursor:pointer;
+
+transition:0.3s;
+
+color:#555;
+
+}
+
+.tab-btn.active{
+
+background:white;
+
+color:#0f172a;
+
+box-shadow:0 4px 10px rgba(0,0,0,0.06);
+
+}
+
+.form-section{
+
+display:none;
+
+animation:fade 0.4s ease;
+
+}
+
+.form-section.active{
+
+display:block;
+
+}
+
+@keyframes fade{
+
+from{
+opacity:0;
+transform:translateY(10px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+h2{
+
+font-size:30px;
+
+margin-bottom:10px;
+
+color:#0f172a;
+
+}
+
+.subtitle{
+
+color:#64748b;
+
+margin-bottom:35px;
+
+font-size:15px;
+
+}
+
+.input-group{
+
+margin-bottom:20px;
+
+}
+
+.input-group label{
+
+display:block;
+
+margin-bottom:8px;
+
+font-size:14px;
+
+font-weight:500;
+
+color:#334155;
+
+}
+
+.input-group input,
+.input-group select{
+
+width:100%;
+
+padding:15px 18px;
+
+border:1px solid #dbe4ea;
+
+border-radius:14px;
+
+outline:none;
+
+font-size:15px;
+
+transition:0.3s;
+
+background:#fbfdff;
+
+}
+
+.input-group input:focus,
+.input-group select:focus{
+
+border-color:#0ea5e9;
+
+background:white;
+
+}
+
+.auth-btn{
+
+width:100%;
+
+padding:16px;
+
+border:none;
+
+border-radius:14px;
+
+background:linear-gradient(135deg,#0ea5e9,#14b8a6);
+
+color:white;
+
+font-size:16px;
+
+font-weight:600;
+
+cursor:pointer;
+
+transition:0.3s;
+
+margin-top:10px;
+
+}
+
+.auth-btn:hover{
+
+transform:translateY(-2px);
+
+opacity:0.95;
+
+}
+
+.bottom-text{
+
+text-align:center;
+
+margin-top:25px;
+
+font-size:14px;
+
+color:#64748b;
+
+}
+
+.bottom-text span{
+
+color:#0ea5e9;
+
+cursor:pointer;
+
+font-weight:600;
+
+}
+
+.error{
+
+color:red;
+
+font-size:13px;
+
+margin-top:5px;
+
+display:none;
+
+}
+
+.show-password{
+
+margin-top:8px;
+
+font-size:14px;
+
+color:#334155;
+
+}
+
+@media(max-width:950px){
+
+.container{
+
+flex-direction:column;
+
+height:auto;
+
+}
+
+.left-panel,
+.right-panel{
+
+width:100%;
+
+}
+
+.left-panel{
+
+padding:50px 30px;
+
+}
+
+.right-panel{
+
+padding:40px 30px;
+
+}
+
+.left-panel h1{
+
+font-size:32px;
+
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- ================= LEFT PANEL ================= -->
+
+<div class="left-panel">
+
+<div class="logo">
+
+CivicAI
+
+</div>
+
+<h1>
+
+Smart Civic Management Platform
+
+</h1>
+
+<p>
+
+AI-powered civic issue reporting and municipal management system designed for smarter cities, faster response, and transparent governance.
+
+</p>
+
+</div>
+
+<!-- ================= RIGHT PANEL ================= -->
+
+<div class="right-panel">
+
+<!-- ================= TABS ================= -->
+
+<div class="tabs">
+
+<button
+class="tab-btn active"
+onclick="showTab('login')"
+>
+
+Login
+
+</button>
+
+<button
+class="tab-btn"
+onclick="showTab('register')"
+>
+
+Register
+
+</button>
+
+</div>
+
+<!-- ================= LOGIN ================= -->
+
+<div class="form-section active" id="login">
+
+<h2>Welcome Back</h2>
+
+<p class="subtitle">
+
+Login to continue managing civic issues.
+
+</p>
+
+<form
+action="/login"
+method="POST"
+onsubmit="return validateLogin()"
+>
+
+<div class="input-group">
+
+<label>Email Address</label>
+
+<input
+type="email"
+name="email"
+id="loginEmail"
+placeholder="Enter your email"
+required
+>
+
+</div>
+
+<div class="input-group">
+
+<label>Password</label>
+
+<input
+type="password"
+name="password"
+id="loginPassword"
+placeholder="Enter your password"
+required
+>
+
+<div class="show-password">
+
+<input
+type="checkbox"
+onclick="togglePassword('loginPassword')"
+>
+
+Show Password
+
+</div>
+
+</div>
+
+<button class="auth-btn" type="submit">
+
+Login
+
+</button>
+
+</form>
+
+<div class="bottom-text">
+
+Don’t have an account?
+
+<span onclick="showTab('register')">
+
+Register
+
+</span>
+
+</div>
+
+</div>
+
+<!-- ================= REGISTER ================= -->
+
+<div class="form-section" id="register">
+
+<h2>Create Account</h2>
+
+<p class="subtitle">
+
+Register for the smart civic platform.
+
+</p>
+
+<form
+action="/register"
+method="POST"
+onsubmit="return validateRegisterForm()"
+>
+
+<div class="input-group">
+
+<label>Full Name</label>
+
+<input
+type="text"
+name="name"
+id="name"
+placeholder="Enter full name"
+required
+>
+
+<div class="error" id="nameError">
+
+Invalid full name
+
+</div>
+
+</div>
+
+<div class="input-group">
+
+<label>Email Address</label>
+
+<input
+type="email"
+name="email"
+id="email"
+placeholder="Enter your email"
+required
+>
+
+</div>
+
+<div class="input-group">
+
+<label>Password</label>
+
+<input
+type="password"
+name="password"
+id="password"
+placeholder="Create password"
+required
+>
+
+<div class="show-password">
+<label>Show Password</label>
+<input
+type="checkbox"
+onclick="togglePassword('password')"
+>
+
+</div>
+
+<div class="error" id="passwordError">
+
+Weak password
+
+</div>
+
+</div>
+
+<div class="input-group">
+
+<label>Select Role</label>
+
+<select name="role" required>
+
+<option value="User">
+
+User
+
+</option>
+
+<option value="Admin">
+
+Admin
+
+</option>
+
+</select>
+
+</div>
+
+<button class="auth-btn" type="submit">
+
+Create Account
+
+</button>
+
+</form>
+
+<div class="bottom-text">
+
+Already have an account?
+
+<span onclick="showTab('login')">
+
+Login
+
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+/* ================= TAB SWITCH ================= */
+
+const tabs = document.querySelectorAll(".tab-btn");
+
+const sections = document.querySelectorAll(".form-section");
+
+function showTab(tab){
+
+sections.forEach(section=>{
+
+section.classList.remove("active");
+
+});
+
+tabs.forEach(btn=>{
+
+btn.classList.remove("active");
+
+});
+
+document.getElementById(tab).classList.add("active");
+
+if(tab === "login"){
+
+tabs[0].classList.add("active");
+
+}
+
+else{
+
+tabs[1].classList.add("active");
+
+}
+
+}
+
+/* ================= SHOW PASSWORD ================= */
+
+function togglePassword(id){
+
+const input = document.getElementById(id);
+
+if(input.type === "password"){
+
+input.type = "text";
+
+}
+
+else{
+
+input.type = "password";
+
+}
+
+}
+
+/* ================= LOGIN VALIDATION ================= */
+
+function validateLogin(){
+
+const email =
+document.getElementById("loginEmail").value;
+
+const password =
+document.getElementById("loginPassword").value;
+
+if(email.trim() === ""){
+
+alert("Email required");
+
+return false;
+
+}
+
+if(password.trim() === ""){
+
+alert("Password required");
+
+return false;
+
+}
+
+return true;
+}
+
+/* ================= REGISTER VALIDATION ================= */
+
+function validateRegisterForm(){
+
+    const name =
+    document.getElementById("name").value.trim();
+
+    const password =
+    document.getElementById("password").value;
+
+    const confirmPassword =
+    document.getElementById("confirmPassword").value;
+
+    const nameError =
+    document.getElementById("nameError");
+
+    const passwordError =
+    document.getElementById("passwordError");
+
+    const confirmError =
+    document.getElementById("confirmError");
+
+    // RESET ERRORS
+
+    nameError.style.display = "none";
+
+    passwordError.style.display = "none";
+
+    confirmError.style.display = "none";
+
+    // =========================
+    // NAME VALIDATION
+    // =========================
+
+    // No numbers allowed
+
+    const numberRegex = /\d/;
+
+    if(numberRegex.test(name)){
+
+        nameError.innerText =
+        "Name should not contain numbers";
+
+        nameError.style.display = "block";
+
+        return false;
+    }
+
+    // No repeated characters
+
+    const repeatRegex = /(.)\1{2,}/;
+
+    if(repeatRegex.test(name)){
+
+        nameError.innerText =
+        "Repeated characters are not allowed";
+
+        nameError.style.display = "block";
+
+        return false;
+    }
+
+    // Minimum name length
+
+    if(name.length < 3){
+
+        nameError.innerText =
+        "Name must be at least 3 characters";
+
+        nameError.style.display = "block";
+
+        return false;
+    }
+
+    // =========================
+    // PASSWORD VALIDATION
+    // =========================
+
+    const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+
+    if(!passwordRegex.test(password)){
+
+        passwordError.innerText =
+        "Password must contain:\nUppercase, Lowercase, Number, Special Character and 8+ characters";
+
+        passwordError.style.display = "block";
+
+        return false;
+    }
+
+    // =========================
+    // CONFIRM PASSWORD
+    // =========================
+
+    if(password !== confirmPassword){
+
+        confirmError.innerText =
+        "Passwords do not match";
+
+        confirmError.style.display = "block";
+
+        return false;
+    }
+
+    // =========================
+    // SUCCESS
+    // =========================
+
+    alert("Registration Successful");
+
+    return true;
+
+}
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Smart Civic AI</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>AI Civic Issue Detection</h1>
+
+    <form
+        action="/upload"
+        method="POST"
+        enctype="multipart/form-data"
+    >
+
+        <input
+            type="file"
+            name="image"
+            required
+        >
+
+        <input
+            type="hidden"
+            id="latitude"
+            name="latitude"
+        >
+
+        <input
+            type="hidden"
+            id="longitude"
+            name="longitude"
+        >
+
+        <button type="submit">
+            Analyze Issue
+        </button>
+
+    </form>
+
+</div>
+
+<script>
+
+navigator.geolocation.getCurrentPosition((position)=>{
+
+    document.getElementById("latitude").value =
+        position.coords.latitude;
+
+    document.getElementById("longitude").value =
+        position.coords.longitude;
+
+});
+
+</script>
+
+</body>
+</html>

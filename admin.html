@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>CivicAI Admin Dashboard</title>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<link
+rel="stylesheet"
+href="https://unpkg.com/leaflet/dist/leaflet.css"
+/>
+
+<script
+src="https://unpkg.com/leaflet/dist/leaflet.js">
+</script>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+
+background:
+linear-gradient(135deg,#020617,#0f172a,#0f766e);
+
+color:white;
+
+min-height:100vh;
+
+padding:20px;
+
+overflow-x:hidden;
+
+}
+
+/* ================= NAVBAR ================= */
+
+.navbar{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+padding:20px 30px;
+
+border-radius:24px;
+
+background:rgba(255,255,255,0.06);
+
+backdrop-filter:blur(14px);
+
+margin-bottom:30px;
+
+border:1px solid rgba(255,255,255,0.08);
+
+}
+
+.search{
+
+width:340px;
+
+padding:14px 18px;
+
+border:none;
+
+border-radius:14px;
+
+background:rgba(255,255,255,0.08);
+
+color:white;
+
+outline:none;
+
+}
+
+.top-right{
+
+display:flex;
+align-items:center;
+gap:20px;
+
+font-weight:600;
+
+}
+
+/* ================= STATS ================= */
+
+.stats{
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+
+gap:20px;
+
+margin-bottom:30px;
+
+}
+
+.card{
+
+background:rgba(255,255,255,0.05);
+
+padding:30px;
+
+border-radius:24px;
+
+border:1px solid rgba(255,255,255,0.08);
+
+backdrop-filter:blur(12px);
+
+box-shadow:0 0 20px rgba(0,255,255,0.06);
+
+}
+
+.card h2{
+
+font-size:42px;
+
+margin-top:10px;
+
+}
+
+/* ================= TABLE ================= */
+
+.table-container{
+
+background:rgba(255,255,255,0.05);
+
+padding:25px;
+
+border-radius:24px;
+
+overflow-x:auto;
+
+margin-bottom:30px;
+
+}
+
+table{
+
+width:100%;
+
+border-collapse:collapse;
+
+}
+
+table th{
+
+padding:18px;
+
+background:rgba(255,255,255,0.08);
+
+text-align:left;
+
+color:#67e8f9;
+
+font-size:15px;
+
+}
+
+table td{
+
+padding:18px;
+
+border-bottom:1px solid rgba(255,255,255,0.08);
+
+vertical-align:middle;
+
+}
+
+table tr{
+
+transition:0.3s;
+cursor:pointer;
+
+}
+
+table tr:hover{
+
+background:rgba(255,255,255,0.03);
+
+}
+
+.issue-image{
+
+width:90px;
+height:75px;
+
+object-fit:cover;
+
+border-radius:14px;
+
+}
+
+/* ================= BADGES ================= */
+
+.badge{
+
+padding:8px 16px;
+
+border-radius:20px;
+
+font-size:13px;
+
+font-weight:600;
+
+display:inline-block;
+
+}
+
+.high{
+background:#ef4444;
+}
+
+.medium{
+background:#f59e0b;
+}
+
+.low{
+background:#10b981;
+}
+
+/* ================= BUTTONS ================= */
+
+.actions{
+
+display:flex;
+flex-direction:column;
+gap:10px;
+
+}
+
+.action-btn{
+
+padding:10px 16px;
+
+border:none;
+
+border-radius:12px;
+
+cursor:pointer;
+
+color:white;
+
+font-size:13px;
+
+font-weight:600;
+
+width:130px;
+
+transition:0.3s;
+
+}
+
+.action-btn:hover{
+
+transform:translateY(-2px);
+
+}
+
+.progress{
+background:#f59e0b;
+}
+
+.resolve{
+background:#10b981;
+}
+
+.delete{
+background:#ef4444;
+}
+
+/* ================= CHARTS ================= */
+
+.charts{
+
+display:grid;
+
+grid-template-columns:1fr 1fr;
+
+gap:20px;
+
+margin-bottom:30px;
+
+}
+
+.chart-card{
+
+background:rgba(255,255,255,0.05);
+
+padding:25px;
+
+border-radius:24px;
+
+height:420px;
+
+position:relative;
+
+overflow:hidden;
+
+}
+
+.chart-card canvas{
+
+max-height:320px !important;
+
+}
+
+/* ================= MAP ================= */
+
+.map-card{
+
+background:rgba(255,255,255,0.05);
+
+padding:25px;
+
+border-radius:24px;
+
+overflow:hidden;
+
+}
+
+#map{
+
+height:500px;
+
+width:100%;
+
+border-radius:20px;
+
+overflow:hidden;
+
+}
+
+/* ================= FOOTER ================= */
+
+.footer{
+
+text-align:center;
+
+padding:30px;
+
+color:#cbd5e1;
+
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:1000px){
+
+.charts{
+
+grid-template-columns:1fr;
+
+}
+
+.search{
+
+width:100%;
+
+}
+
+.navbar{
+
+flex-direction:column;
+gap:15px;
+
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<div class="navbar">
+
+
+    <div style="
+display:flex;
+align-items:center;
+gap:12px;
+font-size:34px;
+font-weight:700;
+color:#67e8f9;
+">
+
+🏙️ CivicAI
+
+</div>
+
+<input
+type="text"
+placeholder="Search complaints..."
+class="search">
+
+<div class="top-right">
+
+<div>🔔</div>
+
+<div>👤 Admin</div>
+
+<div id="datetime"></div>
+
+<a href="/">
+
+<button class="action-btn resolve">
+
+Logout
+
+</button>
+
+</a>
+
+</div>
+
+</div>
+
+<!-- ================= STATS ================= -->
+
+<div class="stats">
+
+<div class="card">
+
+<p>Total Complaints</p>
+
+<h2>{{total}}</h2>
+
+</div>
+
+<div class="card">
+
+<p>Pending</p>
+
+<h2>{{pending}}</h2>
+
+</div>
+
+<div class="card">
+
+<p>Resolved</p>
+
+<h2>{{resolved}}</h2>
+
+</div>
+
+<div class="card">
+
+<p>High Severity</p>
+
+<h2>{{high}}</h2>
+
+</div>
+
+</div>
+
+<!-- ================= TABLE ================= -->
+
+<div class="table-container">
+
+<h2>📋 Complaint Management</h2>
+
+<br>
+
+<table>
+
+<tr>
+
+<th>Image</th>
+<th>Issue</th>
+<th>User Email</th>
+<th>Severity</th>
+<th>Location</th>
+<th>Status</th>
+<th>Actions</th>
+
+</tr>
+
+{% for row in complaints %}
+
+<tr ondblclick="window.location='/complaint/{{row.id}}'">
+
+<td>
+
+<img
+src="/uploads/{{row.image}}"
+class="issue-image">
+
+</td>
+
+<td>
+
+<div style="font-weight:600;">
+
+{{row.issue_type}}
+
+</div>
+
+<div style="
+font-size:12px;
+margin-top:5px;
+color:#94a3b8;
+">
+
+Complaint #{{row.id}}
+
+</div>
+
+</td>
+
+<td>
+
+{{row.user_email}}
+
+</td>
+
+<td>
+
+{% if row.severity.lower() == "high" %}
+
+<span class="badge high">
+
+{{row.severity}}
+
+</span>
+
+{% elif row.severity.lower() == "medium" %}
+
+<span class="badge medium">
+
+{{row.severity}}
+
+</span>
+
+{% else %}
+
+<span class="badge low">
+
+{{row.severity}}
+
+</span>
+
+{% endif %}
+
+</td>
+
+<td>
+
+{{row.latitude}},
+{{row.longitude}}
+
+</td>
+
+<td>
+
+{% if row.status.lower() == "resolved" %}
+
+<span class="badge low">
+
+{{row.status}}
+
+</span>
+
+{% elif row.status.lower() == "in progress" %}
+
+<span class="badge medium">
+
+{{row.status}}
+
+</span>
+
+{% else %}
+
+<span class="badge high">
+
+{{row.status}}
+
+</span>
+
+{% endif %}
+
+</td>
+
+<td>
+
+<div class="actions">
+
+<a href="/status/{{row.id}}/In Progress">
+
+<button class="action-btn progress">
+
+In Progress
+
+</button>
+
+</a>
+
+<a href="/status/{{row.id}}/Resolved">
+
+<button class="action-btn resolve">
+
+Resolve
+
+</button>
+
+</a>
+
+<a
+href="/delete/{{row.id}}"
+onclick="return confirm('Delete Complaint?')">
+
+<button class="action-btn delete">
+
+Delete
+
+</button>
+
+</a>
+
+</div>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+<!-- ================= CHARTS ================= -->
+
+<div class="charts">
+
+<div class="chart-card">
+
+<h2>📊 Complaint Types</h2>
+
+<br>
+
+<canvas id="pieChart"></canvas>
+
+</div>
+
+<div class="chart-card">
+
+<h2>📈 Severity Distribution</h2>
+
+<br>
+
+<canvas id="barChart"></canvas>
+
+</div>
+
+</div>
+
+<!-- ================= MAP ================= -->
+
+<div class="map-card">
+
+<h2>🗺️ Smart City Complaint Map</h2>
+
+<br>
+
+<div id="map"></div>
+
+</div>
+
+<!-- ================= FOOTER ================= -->
+
+<div class="footer">
+
+© 2026 CivicAI Smart City AI Platform
+
+</div>
+
+<script>
+
+/* ================= PIE CHART ================= */
+
+const issueLabels = [
+
+{% for row in issue_data %}
+
+"{{row.issue_type}}",
+
+{% endfor %}
+
+];
+
+const issueCounts = [
+
+{% for row in issue_data %}
+
+{{row.total}},
+
+{% endfor %}
+
+];
+
+new Chart(document.getElementById("pieChart"),{
+
+type:"pie",
+
+data:{
+
+labels:issueLabels,
+
+datasets:[{
+
+data:issueCounts
+
+}]
+
+},
+
+options:{
+
+responsive:true,
+maintainAspectRatio:false
+
+}
+
+});
+
+/* ================= BAR CHART ================= */
+
+const severityLabels = [
+
+{% for row in severity_data %}
+
+"{{row.severity}}",
+
+{% endfor %}
+
+];
+
+const severityCounts = [
+
+{% for row in severity_data %}
+
+{{row.total}},
+
+{% endfor %}
+
+];
+
+new Chart(document.getElementById("barChart"),{
+
+type:"bar",
+
+data:{
+
+labels:severityLabels,
+
+datasets:[{
+
+data:severityCounts
+
+}]
+
+},
+
+options:{
+
+responsive:true,
+maintainAspectRatio:false
+
+}
+
+});
+
+/* ================= DATETIME ================= */
+
+function updateDateTime(){
+
+const now = new Date();
+
+document.getElementById("datetime").innerHTML =
+now.toLocaleString();
+
+}
+
+setInterval(updateDateTime,1000);
+
+/* ================= MAP ================= */
+
+const map = L.map('map').setView([19.8762,75.3433],10);
+
+L.tileLayer(
+'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+{
+maxZoom:19,
+}
+).addTo(map);
+
+{% for row in complaints %}
+
+{% if row.latitude and row.longitude %}
+
+L.marker([
+
+parseFloat("{{row.latitude}}"),
+parseFloat("{{row.longitude}}")
+
+])
+
+.addTo(map)
+
+.bindPopup(`
+
+<b>{{row.issue_type}}</b><br>
+
+{{row.description}}
+
+`);
+
+{% endif %}
+
+{% endfor %}
+
+</script>
+
+</body>
+
+</html>

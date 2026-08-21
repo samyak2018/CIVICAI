@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Complaint Details</title>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+
+background:
+linear-gradient(135deg,#020617,#0f172a,#0f766e);
+
+min-height:100vh;
+
+padding:30px;
+
+color:white;
+
+}
+
+.container{
+
+max-width:1200px;
+
+margin:auto;
+
+background:rgba(255,255,255,0.05);
+
+padding:30px;
+
+border-radius:28px;
+
+backdrop-filter:blur(14px);
+
+border:1px solid rgba(255,255,255,0.08);
+
+}
+
+.top{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+margin-bottom:30px;
+
+}
+
+.logo{
+
+font-size:34px;
+
+font-weight:700;
+
+color:#67e8f9;
+
+}
+
+.back-btn{
+
+padding:14px 24px;
+
+border:none;
+
+border-radius:14px;
+
+background:#06b6d4;
+
+color:white;
+
+font-weight:600;
+
+cursor:pointer;
+
+}
+
+.main{
+
+display:grid;
+
+grid-template-columns:1fr 1fr;
+
+gap:30px;
+
+}
+
+@media(max-width:1000px){
+
+.main{
+
+grid-template-columns:1fr;
+
+}
+
+}
+
+.image-box img{
+
+width:100%;
+
+height:500px;
+
+object-fit:cover;
+
+border-radius:24px;
+
+}
+
+.details{
+
+background:rgba(255,255,255,0.04);
+
+padding:25px;
+
+border-radius:24px;
+
+}
+
+.section{
+
+margin-bottom:22px;
+
+}
+
+.label{
+
+color:#67e8f9;
+
+font-weight:600;
+
+margin-bottom:8px;
+
+font-size:17px;
+
+}
+
+.value{
+
+line-height:1.8;
+
+color:#e2e8f0;
+
+font-size:15px;
+
+}
+
+.badge{
+
+padding:8px 16px;
+
+border-radius:20px;
+
+font-size:13px;
+
+font-weight:600;
+
+display:inline-block;
+
+}
+
+.high{
+background:#ef4444;
+}
+
+.medium{
+background:#f59e0b;
+}
+
+.low{
+background:#10b981;
+}
+
+.actions{
+
+display:flex;
+
+gap:15px;
+
+margin-top:25px;
+
+flex-wrap:wrap;
+
+}
+
+.btn{
+
+padding:14px 22px;
+
+border:none;
+
+border-radius:14px;
+
+font-weight:600;
+
+cursor:pointer;
+
+color:white;
+
+transition:0.3s;
+
+}
+
+.progress{
+background:#f59e0b;
+}
+
+.resolve{
+background:#10b981;
+}
+
+.delete{
+background:#ef4444;
+}
+
+.btn:hover{
+
+transform:translateY(-2px);
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="top">
+
+<div class="logo">
+
+🏙️ CivicAI
+
+</div>
+
+<a href="/admin">
+
+<button class="back-btn">
+
+⬅ Back
+
+</button>
+
+</a>
+
+</div>
+
+<div class="main">
+
+<!-- ================= IMAGE ================= -->
+
+<div class="image-box">
+
+<img src="/uploads/{{complaint.image}}">
+
+</div>
+
+<!-- ================= DETAILS ================= -->
+
+<div class="details">
+
+<div class="section">
+
+<div class="label">
+
+Issue Type
+
+</div>
+
+<div class="value">
+
+{{complaint.issue_type}}
+
+</div>
+
+</div>
+
+<div class="section">
+
+<div class="label">
+
+User Email
+
+</div>
+
+<div class="value">
+
+{{complaint.user_email}}
+
+</div>
+
+</div>
+
+<div class="section">
+
+<div class="label">
+
+English Description
+
+</div>
+
+<div class="value">
+
+{{complaint.description}}
+
+</div>
+
+</div>
+
+<div class="section">
+
+<div class="label">
+
+Marathi Description
+
+</div>
+
+<div class="value">
+
+{{complaint.description_marathi}}
+
+</div>
+
+</div>
+
+<div class="section">
+
+<div class="label">
+
+AI Solution
+
+</div>
+
+<div class="value">
+
+{{complaint.solution}}
+
+</div>
+
+</div>
+
+<div class="section">
+
+<div class="label">
+
+Severity
+
+</div>
+
+<div class="value">
+
+{% if complaint.severity.lower() == "high" %}
+
+<span class="badge high">
+
+{{complaint.severity}}
+
+</span>
+
+{% elif complaint.severity.lower() == "medium" %}
+
+<span class="badge medium">
+
+{{complaint.severity}}
+
+</span>
+
+{% else %}
+
+<span class="badge low">
+
+{{complaint.severity}}
+
+</span>
+
+{% endif %}
+
+</div>
+
+</div>
+
+<div class="section">
+
+<div class="label">
+
+Status
+
+</div>
+
+<div class="value">
+
+{% if complaint.status.lower() == "resolved" %}
+
+<span class="badge low">
+
+{{complaint.status}}
+
+</span>
+
+{% elif complaint.status.lower() == "in progress" %}
+
+<span class="badge medium">
+
+{{complaint.status}}
+
+</span>
+
+{% else %}
+
+<span class="badge high">
+
+{{complaint.status}}
+
+</span>
+
+{% endif %}
+
+</div>
+
+</div>
+
+<div class="section">
+
+<div class="label">
+
+Location
+
+</div>
+
+<div class="value">
+
+📍 {{complaint.latitude}},
+{{complaint.longitude}}
+
+</div>
+
+</div>
+
+<div class="actions">
+
+<a href="/status/{{complaint.id}}/In Progress">
+
+<button class="btn progress">
+
+In Progress
+
+</button>
+
+</a>
+
+<a href="/status/{{complaint.id}}/Resolved">
+
+<button class="btn resolve">
+
+Resolve
+
+</button>
+
+</a>
+
+<a
+href="/delete/{{complaint.id}}"
+onclick="return confirm('Delete Complaint?')">
+
+<button class="btn delete">
+
+Delete
+
+</button>
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+
+</html>
